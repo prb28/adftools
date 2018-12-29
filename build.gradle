@@ -1,0 +1,50 @@
+apply plugin: 'c'
+
+def os = org.gradle.internal.os.OperatingSystem.current()
+model {
+    components {
+        ADFLib(NativeLibrarySpec) {
+            sources {
+                c {
+                    source {
+                        srcDir 'adflib'
+                        if (os.isWindows()) {
+                            srcDir 'adflib/win32'
+                        } else {
+                            srcDir 'adflib/generic'
+                        }
+                        include '*.c'
+                    }
+                    exportedHeaders {
+                        srcDir 'adflib'
+                        if (os.isWindows()) {
+                            srcDir 'adflib/win32'
+                        } else {
+                            srcDir 'adflib/generic'
+                        }
+                        include '*.h'
+                    }
+                }
+            }
+        }
+        for (cmpName in ['adfcreate', 'adfcopy', 'adfdelete', 'adfdump', 'adfextract', 'adfinfo', 'adfinstall', 'adflist', 'adfmakedir']) {
+            "$cmpName"(NativeExecutableSpec) {
+                def currentComponentName = name;
+                sources {
+                    c {
+                        source {
+                            srcDir '.'
+                            include "${currentComponentName}.c"
+                            include 'misc.c'
+                            include 'version.c'
+                            include 'error.c'
+                            include 'zfile.c'
+                            include 'bootblocks.c'
+                        }
+                        lib library: 'ADFLib', linkage: 'static'
+                    }
+                }
+            }
+        }
+    }
+}
