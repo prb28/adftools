@@ -2,6 +2,10 @@ apply plugin: 'c'
 
 def os = org.gradle.internal.os.OperatingSystem.current()
 model {
+    buildTypes {
+        debug
+        release
+    }
     components {
         ADFLib(NativeLibrarySpec) {
             sources {
@@ -44,6 +48,18 @@ model {
                         lib library: 'ADFLib', linkage: 'static'
                     }
                 }
+            }
+        }
+    }
+    binaries {
+        all {
+            if ((toolChain in Gcc || toolChain in Clang) && buildType == buildTypes.debug) {
+                cCompiler.args "-g"
+            }
+            if (toolChain in VisualCpp && buildType == buildTypes.debug) {
+                cCompiler.args '/Zi'
+                cCompiler.define 'DEBUG'
+                linker.args '/DEBUG'
             }
         }
     }
