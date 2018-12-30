@@ -158,9 +158,10 @@ adf_validate_directory (char *dir)
 
   /* a single '/' means to copy to the root directory */
   if ((strlen (directory) == 1) &&
-      (strcmp (directory, "/") == 0))
+      (strcmp (directory, "/") == 0)){
     free (directory);
     return 1;
+  }
 
   /* delete leading and trailing slashes (/) in the string (if any) */
   while (directory[strlen (directory) - 1] == '/')
@@ -186,9 +187,10 @@ adf_validate_directory (char *dir)
   }
 
   /* last element is left in 'directory' */
-  if (adfChangeDir (volume, directory) != RC_OK)
+  if (adfChangeDir (volume, directory) != RC_OK) {
     free (directory);
     return 0;
+  }
 
   /* all went fine. update the global sector variable */
   sector = volume->curDirPtr;
@@ -327,11 +329,12 @@ check_destination_dir (const char *directory)
     return 0;
   }
 
-  if (!S_ISDIR (statbuf.st_mode))
+  if (!S_ISDIR (statbuf.st_mode)) {
     /* not a dir */
     return 0;
-  else
+  } else {
     return 1;
+  }
 }
 
 /* allocate a buffer big enough to contain the biggest pathname possible */
