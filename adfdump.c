@@ -5,16 +5,20 @@
  *
  * Copyright (C)2002-2015 Rikard Bosnjakovic <bos@hack.org>
  */
+#ifdef _MSC_VER
+#include "win32/win32_unistd.h"
+#else
+#include <unistd.h>
+#include <getopt.h>
+#endif
 #include <adflib.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
 
 #include "bootblocks.h"
 #include "error.h"

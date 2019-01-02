@@ -10,7 +10,12 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _MSC_VER
+#include "win32/win32_unistd.h"
+#else
 #include <unistd.h>
+#endif
 
 #include "error.h"
 #include "misc.h"
@@ -73,14 +78,13 @@ basename (char *filename)
 {
   char *p;
 
-  for (p = filename; *p == '/'; ++p)
+  for (p = filename; *p == DIRSEP; ++p)
     /* do nothing if "/", "//" etc */
     ;
-
   if (*p == '\0')
     return (p - 1);
 
-  p = strrchr (filename, '/');
+  p = strrchr (filename, DIRSEP);
   if (p == NULL)
     return (filename);
   else
@@ -148,7 +152,7 @@ mount_adf (char *filename, struct Device **dev, struct Volume **vol, int rw)
   }
 
   if (rw == READ_WRITE)
-    *dev = adfMountDev (n_zfile_open(filename, "rw", 1), rw);
+    *dev = adfMountDev (n_zfile_open(filename, "r+", 1), rw);
   else
     *dev = adfMountDev (n_zfile_open(filename, "r", 0), rw);
 

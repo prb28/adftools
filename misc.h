@@ -10,7 +10,7 @@
 #define SECTORS 11
 #define HEADS 2
 
-#ifdef WIN32
+#if (defined WIN32 || defined _MSC_VER)
 #define DIRSEP '\\'
 #define MKDIR "md"
 #else

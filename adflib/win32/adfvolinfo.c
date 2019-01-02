@@ -23,7 +23,7 @@
  *
  */
 
-
+#include "windows.h"
 #include "../ADF_raw.h"
 #include "../ADF_Util.h"
 

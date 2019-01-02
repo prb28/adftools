@@ -45,14 +45,16 @@
 
 
 /* defines max and min */
-
+#ifndef _MSC_VER
 #ifndef max
 #define max(a,b)        (a)>(b) ? (a) : (b)
 #endif
 #ifndef min
 #define min(a,b)        (a)<(b) ? (a) : (b)
 #endif
-
+# else
+#include <stdlib.h>
+#endif
 
 /* (*byte) to (*short) and (*byte) to (*long) conversion */
 

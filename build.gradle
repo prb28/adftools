@@ -1,4 +1,5 @@
 apply plugin: 'c'
+apply plugin: 'visual-studio'
 
 def os = org.gradle.internal.os.OperatingSystem.current()
 model {
@@ -29,21 +30,37 @@ model {
                         include '*.h'
                     }
                 }
+                binaries.all {
+                    linker.args 'User32.lib'
+                }
             }
         }
         for (cmpName in ['adfcreate', 'adfcopy', 'adfdelete', 'adfdump', 'adfextract', 'adfinfo', 'adfinstall', 'adflist', 'adfmakedir']) {
-            "$cmpName"(NativeExecutableSpec) {
+            def nCmpName = cmpName
+            if (nCmpName == 'adfinstall') {
+                // Too dumb windows .... program with install in name asks for admin privileges..
+                nCmpName = 'adfinst'
+            }
+            "$nCmpName"(NativeExecutableSpec) {
                 def currentComponentName = name;
                 sources {
                     c {
                         source {
                             srcDir '.'
-                            include "${currentComponentName}.c"
+                            if (currentComponentName == 'adfinst') {
+                                // Too dumb windows .... program with install in name asks for admin privileges..
+                                include "adfinstall.c"
+                            } else {
+                                include "${currentComponentName}.c"
+                            }
                             include 'misc.c'
                             include 'version.c'
                             include 'error.c'
                             include 'zfile.c'
                             include 'bootblocks.c'
+                            if (os.isWindows()) {
+                                include "win32/*.c"
+                            }
                         }
                         lib library: 'ADFLib', linkage: 'static'
                     }
@@ -56,10 +73,14 @@ model {
             if ((toolChain in Gcc || toolChain in Clang) && buildType == buildTypes.debug) {
                 cCompiler.args "-g"
             }
-            if (toolChain in VisualCpp && buildType == buildTypes.debug) {
-                cCompiler.args '/Zi'
-                cCompiler.define 'DEBUG'
-                linker.args '/DEBUG'
+            if (toolChain in VisualCpp) {
+                if (buildType == buildTypes.debug) {
+                    cCompiler.args '/FS'
+                    cCompiler.args '/Zi'
+                    cCompiler.define 'DEBUG'
+                    //cCompiler.define '_MBCS'
+                    linker.args '/DEBUG'
+                }
             }
         }
     }
