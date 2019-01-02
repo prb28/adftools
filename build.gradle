@@ -31,7 +31,9 @@ model {
                     }
                 }
                 binaries.all {
-                    linker.args 'User32.lib'
+                    if (os.isWindows()) {
+                        linker.args 'User32.lib'
+                    }
                 }
             }
         }

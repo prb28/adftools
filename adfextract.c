@@ -7,9 +7,11 @@
  */
 #ifdef _MSC_VER
 #include "win32/win32_unistd.h"
+#include <sys/utime.h>
 #else
 #include <unistd.h>
 #include <getopt.h>
+#include <utime.h>
 #endif
 #include <adflib.h>
 #include <errno.h>
@@ -20,7 +22,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
-#include <sys/utime.h>
 
 #include "error.h"
 #include "misc.h"
