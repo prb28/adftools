@@ -123,7 +123,7 @@ do_extract_file(struct Volume *vol, struct Entry *entry, char* path, unsigned ch
   }
 
   /* open the file in the image */
-  file = adfOpenFile (vol, name, "r");
+  file = adfOpenFile (vol, name, "rb");
   if (!file) {
     error (0, "%s: Can't read file from image. Access bits: '%s'", filename, access2str (entry->access));
     fclose (out);

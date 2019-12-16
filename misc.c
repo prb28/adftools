@@ -152,9 +152,9 @@ mount_adf (char *filename, struct Device **dev, struct Volume **vol, int rw)
   }
 
   if (rw == READ_WRITE)
-    *dev = adfMountDev (n_zfile_open(filename, "r+", 1), rw);
+    *dev = adfMountDev (n_zfile_open(filename, "r+b", 1), rw);
   else
-    *dev = adfMountDev (n_zfile_open(filename, "r", 0), rw);
+    *dev = adfMountDev (n_zfile_open(filename, "rb", 0), rw);
 
   if (!*dev) {
     error (0, errmsg, filename);
@@ -299,7 +299,7 @@ read_bootblock (char *filename)
     return NULL;
 
   memset (bootblock, 0, BOOTBLOCK_SIZE);
-  file = f_zfile_open (filename, "r", 0);
+  file = f_zfile_open (filename, "rb", 0);
   if (!file) {
     free (bootblock);
     return NULL;

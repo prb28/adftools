@@ -47,7 +47,7 @@ do_delete_file (struct Volume *volume, SECTNUM parent, char *file, char *fullpat
   struct File *f;
 
   /* check if the file exists, since adfRemoveEntry() only returns YES or NO */
-  f = adfOpenFile (volume, file, "r");
+  f = adfOpenFile (volume, file, "rb");
   if (f == NULL)
     error (0, "No such file or directory '%s'", fullpath);
   else if (adfRemoveEntry (volume, parent, file) != RC_OK) {
